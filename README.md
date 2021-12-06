@@ -1,5 +1,8 @@
 # Feature Flags
 
+[![PHPStan](https://github.com/worksome/feature-flags/actions/workflows/phpstan.yml/badge.svg)](https://github.com/worksome/feature-flags/actions/workflows/phpstan.yml)
+[![run-tests](https://github.com/worksome/feature-flags/actions/workflows/run-tests.yml/badge.svg)](https://github.com/worksome/feature-flags/actions/workflows/run-tests.yml)
+
 A package to manage feature flags in your application. Currently supporting these providers:
 
 - [LaunchDarkly](https://launchdarkly.com/)
