@@ -3,10 +3,10 @@
 namespace Worksome\FeatureFlags;
 
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider as FeatureFlagsProviderContract;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
 use Worksome\FeatureFlags\Facades\Feature;
@@ -27,28 +27,39 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
         $this->publishes([
             __DIR__ . '/../config/feature-flags.php' => config_path('feature-flags.php'),
         ]);
-
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/feature-flags.php',
-            'feature-flags'
-        );
     }
 
     public function register(): void
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/feature-flags.php',
+            'feature-flags'
+        );
+
         $this->app->singleton(
             FeatureFlagsManager::class,
-            static fn(Container $container) => new FeatureFlagsManager($container)
+            static fn (Container $container) => new FeatureFlagsManager($container)
         );
 
         $this->app->singleton(
             FeatureFlagsProviderContract::class,
-            static fn(Container $app) => $app->get(FeatureFlagsManager::class)->driver()
+            function (Container $app) {
+                /** @var FeatureFlagsManager $manager */
+                $manager = $app->get(FeatureFlagsManager::class);
+                return $manager->driver();
+            }
         );
 
         $this->app->singleton(
             FeatureFlagUserConvertor::class,
-            static fn(Container $app) => $app->get(Config::get('feature-flags.convertor'))
+            function (Container $app) {
+                /** @var Application $app */
+                $config = $app['config'];
+
+                /** @var string */
+                $convertor = $config->get('feature-flags.convertor');
+                return $app->get($convertor);
+            }
         );
 
         $this->registerBlade();

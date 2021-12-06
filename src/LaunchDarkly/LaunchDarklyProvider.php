@@ -12,7 +12,7 @@ use Worksome\FeatureFlags\FeatureFlagUser;
 
 class LaunchDarklyProvider implements FeatureFlagsProvider
 {
-    /** @var \LaunchDarkly\LDClient */
+    /** @var \LaunchDarkly\LDClient|null */
     protected $client;
 
     /** @var LDUser */
@@ -20,11 +20,16 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 
     public function __construct()
     {
+        /** @var array<string,mixed> */
+        $config = Config::get('feature-flags.providers.launchdarkly.options', []);
         $options = array_merge([
             'event_publisher' => Guzzle::eventPublisher()
-        ], Config::get('feature-flags.providers.launchdarkly.options') ?? []);
+        ], $config);
 
-        if ($key = Config::get('feature-flags.providers.launchdarkly.key')) {
+        /** @var string $key */
+        $key = Config::get('feature-flags.providers.launchdarkly.key');
+
+        if ($key) {
             $this->client = new LDClient($key, $options);
         }
     }
