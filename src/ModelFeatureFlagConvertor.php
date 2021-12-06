@@ -1,4 +1,5 @@
 <?php
+
 namespace Worksome\FeatureFlags;
 
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;

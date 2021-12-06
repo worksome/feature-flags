@@ -23,14 +23,4 @@ class TestCase extends Orchestra
             FeatureFlagsServiceProvider::class,
         ];
     }
-
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_feature-flags_table.php.stub';
-        $migration->up();
-        */
-    }
 }

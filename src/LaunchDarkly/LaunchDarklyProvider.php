@@ -18,7 +18,8 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
     /** @var LDUser */
     private $user;
 
-    public function __construct() {
+    public function __construct()
+    {
         $options = array_merge([
             'event_publisher' => Guzzle::eventPublisher()
         ], Config::get('feature-flags.providers.launchdarkly.options') ?? []);
@@ -26,7 +27,6 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
         if ($key = Config::get('feature-flags.providers.launchdarkly.key')) {
             $this->client = new LDClient($key, $options);
         }
-
     }
 
     public function setUser(FeatureFlagUser $user): void
@@ -46,7 +46,7 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 
     public function flag(string $flag): bool
     {
-        if(!$this->client) {
+        if (!$this->client) {
             return false;
         }
 

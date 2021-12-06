@@ -1,4 +1,5 @@
 <?php
+
 use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
 
 // config for Worksome/FeatureFlags

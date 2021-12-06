@@ -13,7 +13,7 @@ class FeatureFlagsManager extends Manager
     #[Pure]
     public function createLaunchDarklyDriver(): LaunchDarklyProvider
     {
-        return new LaunchDarklyProvider;
+        return new LaunchDarklyProvider();
     }
 
     #[Pure]

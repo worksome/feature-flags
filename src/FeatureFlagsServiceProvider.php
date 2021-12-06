@@ -25,11 +25,12 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../config/feature-flags.php' => config_path('feature-flags.php'),
+            __DIR__ . '/../config/feature-flags.php' => config_path('feature-flags.php'),
         ]);
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/feature-flags.php', 'feature-flags'
+            __DIR__ . '/../config/feature-flags.php',
+            'feature-flags'
         );
     }
 
@@ -64,7 +65,7 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
 
     private function registerBlade(): void
     {
-        Blade::if('feature', function(string $flag) {
+        Blade::if('feature', function (string $flag) {
             return Feature::flag($flag);
         });
     }
