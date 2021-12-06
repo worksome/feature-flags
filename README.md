@@ -1,4 +1,4 @@
-# A package to manage feature flags in your application
+# Feature Flags
 
 A package to manage feature flags in your application. Currently supporting these providers:
 
