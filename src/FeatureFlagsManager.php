@@ -4,7 +4,8 @@ namespace Worksome\FeatureFlags;
 
 use Illuminate\Support\Manager;
 use JetBrains\PhpStorm\Pure;
-use Worksome\FeatureFlags\LaunchDarkly\LaunchDarklyProvider;
+use Worksome\FeatureFlags\Providers\FakeProvider;
+use Worksome\FeatureFlags\Providers\LaunchDarkly\LaunchDarklyProvider;
 
 class FeatureFlagsManager extends Manager
 {
@@ -12,6 +13,12 @@ class FeatureFlagsManager extends Manager
     public function createLaunchDarklyDriver(): LaunchDarklyProvider
     {
         return new LaunchDarklyProvider();
+    }
+
+    #[Pure]
+    public function createFakeDriver(): FakeProvider
+    {
+        return new FakeProvider();
     }
 
     #[Pure]

@@ -18,7 +18,6 @@ class ModelFeatureFlagConvertor implements FeatureFlagUserConvertor
             throw new InvalidArgumentException('User must have an email');
         }
 
-
         return new FeatureFlagUser($user->id, $user->email);
     }
 }

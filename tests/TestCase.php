@@ -23,4 +23,12 @@ class TestCase extends Orchestra
             FeatureFlagsServiceProvider::class,
         ];
     }
+
+    public function getEnvironmentSetUp($app)
+    {
+        config()->set('database.default', 'testing');
+
+        // fake launchdarkly credentials
+        config()->set('feature-flags.providers.launchdarkly.key', 'asldkngibjdnviunsdijbasdjbsaf');
+    }
 }

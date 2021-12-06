@@ -1,6 +1,6 @@
 <?php
 
-namespace Worksome\FeatureFlags\LaunchDarkly;
+namespace Worksome\FeatureFlags\Providers\LaunchDarkly;
 
 use Illuminate\Support\Facades\Config;
 use LaunchDarkly\LDClient;
