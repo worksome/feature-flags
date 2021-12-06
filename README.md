@@ -1,55 +1,54 @@
-# :package_description
+# A package to manage feature flags in your application
 
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+A package to manage feature flags in your application. Currently supporting these providers:
 
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this skeleton
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+- [LaunchDarkly](https://launchdarkly.com/)
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug_without_prefix-migrations"
-php artisan migrate
+composer require worksome/feature-flags
 ```
 
 You can publish the config file with:
-```bash
-php artisan vendor:publish --tag=":package_slug_without_prefix-config"
-```
-
-Optionally, you can publish the views using
 
 ```bash
-php artisan vendor:publish --tag="example-views"
+php artisan vendor:publish --tag="feature-flags_without_prefix-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
+use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
+
+// config for Worksome/FeatureFlags
 return [
+    'default' => env('FEATURE_FLAGS_PROVIDER', 'launchdarkly'),
+
+    'convertor' => ModelFeatureFlagConvertor::class,
+
+    'providers' => [
+        'launchdarkly' => [
+            'key' => env('LAUNCHDARKLY_SDK_KEY'),
+            'options' => [
+                /**
+                 * https://docs.launchdarkly.com/sdk/features/offline-mode
+                 */
+                'offline' => env('LAUNCHDARKLY_OFFLINE', false)
+            ]
+        ]
+    ]
 ];
 ```
 
-## Usage
+## Usage in Blade
 
 ```php
-$skeleton = new VendorName\Skeleton();
-echo $skeleton->echoPhrase('Hello, VendorName!');
+@feature('feature-flag')
+    This is content under a featre flag.
+@endfeature
 ```
 
 ## Testing
@@ -72,7 +71,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Lukas Juhas](https://github.com/lukasjuhas)
 - [All Contributors](../../contributors)
 
 ## License

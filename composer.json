@@ -1,24 +1,25 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "worksome/feature-flags",
+    "description": "A package to manage feature flags in your application",
     "keywords": [
-        ":vendor_name",
+        "worksome",
         "laravel",
-        ":package_slug"
+        "feature-flags"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/worksome/feature-flags",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Lukas Juhas",
+            "email": "lukas@worksome.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.0|^8.1",
-        "spatie/laravel-package-tools": "^1.9.2",
-        "illuminate/contracts": "^8.73"
+        "illuminate/contracts": "^8.73",
+        "launchdarkly/server-sdk": "^4.0",
+        "spatie/laravel-package-tools": "^1.9.2"
     },
     "require-dev": {
         "nunomaduro/collision": "^5.10",
@@ -31,13 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Worksome\\FeatureFlags\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Worksome\\FeatureFlags\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -58,10 +58,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Worksome\\FeatureFlags\\FeatureFlagsServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FeatureFlags": "Worksome\\FeatureFlags\\Facades\\FeatureFlags"
             }
         }
     },
