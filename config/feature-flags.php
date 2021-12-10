@@ -18,5 +18,13 @@ return [
                 'offline' => env('LAUNCHDARKLY_OFFLINE', false)
             ]
         ]
-    ]
+    ],
+
+    /**
+     * Override flags. If a feature flag is set inside an override,
+     * it will be used instead of the flag set in the provider.
+     *
+     * Usage: ['feature-flag-key' => true]
+     */
+    'overrides' => [],
 ];

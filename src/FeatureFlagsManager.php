@@ -12,13 +12,17 @@ class FeatureFlagsManager extends Manager
     #[Pure]
     public function createLaunchDarklyDriver(): LaunchDarklyProvider
     {
-        return new LaunchDarklyProvider();
+        return new LaunchDarklyProvider(
+            $this->container->get(FeatureFlagsOverridesRepository::class),
+        );
     }
 
     #[Pure]
     public function createFakeDriver(): FakeProvider
     {
-        return new FakeProvider();
+        return new FakeProvider(
+            $this->container->get(FeatureFlagsOverridesRepository::class),
+        );
     }
 
     #[Pure]
