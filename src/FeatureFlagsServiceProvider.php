@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Worksome\FeatureFlags;
 
 use Illuminate\Contracts\Container\Container;
@@ -35,6 +37,12 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
             __DIR__ . '/../config/feature-flags.php',
             'feature-flags'
         );
+
+        $this->app->extend(FeatureFlagsProviderContract::class, function ($provider, $app) {
+            return $app->makeWith(FeatureFlagsOverrideProvider::class, [
+                'provider' => $provider,
+            ]);
+        });
 
         $this->app->singleton(
             FeatureFlagsManager::class,
