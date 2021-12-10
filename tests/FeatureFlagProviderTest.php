@@ -25,13 +25,13 @@ it('should return false if flag is set to false', function () {
     expect($this->provider->flag('test-flag'))->toBe(false);
 });
 
-it('should successfully check inside a blade template', function () {
+it('should validate the blade tags working correctly', function () {
     $bladeSnippet = "@feature('test-flag') This is hidden feature @endfeature";
     $expectedCode = "<?php if (\Illuminate\Support\Facades\Blade::check('feature', 'test-flag')): ?> This is hidden feature <?php endif; ?>";
     expect(Blade::compileString($bladeSnippet))->toBe($expectedCode);
 });
 
-it('should succesfully follow override', function () {
+it('should succesfully follow the override for a feature flag', function () {
     expect(Config::get('feature-flags.overrides.amazing-feature'))->toBe(null);
     expect($this->provider->flag('amazing-feature'))->toBe(false);
 
