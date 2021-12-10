@@ -36,6 +36,12 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
             'feature-flags'
         );
 
+        $this->app->extend(FeatureFlagsProviderContract::class, function ($provider, $app) {
+            return $app->makeWith(FeatureFlagsOverrideProvider::class, [
+                'provider' => $provider,
+            ]);
+        });
+
         $this->app->singleton(
             FeatureFlagsManager::class,
             static fn (Container $container) => new FeatureFlagsManager($container)

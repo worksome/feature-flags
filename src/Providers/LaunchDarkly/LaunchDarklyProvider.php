@@ -8,7 +8,6 @@ use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
 use LaunchDarkly\Integrations\Guzzle;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
-use Worksome\FeatureFlags\FeatureFlagsOverridesRepository;
 use Worksome\FeatureFlags\FeatureFlagUser;
 
 class LaunchDarklyProvider implements FeatureFlagsProvider
@@ -19,9 +18,8 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
     /** @var LDUser */
     private $user;
 
-    public function __construct(
-        private FeatureFlagsOverridesRepository $overrides
-    ) {
+    public function __construct()
+    {
         /** @var array<string,mixed> */
         $config = Config::get('feature-flags.providers.launchdarkly.options', []);
         $options = array_merge([
@@ -53,10 +51,6 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 
     public function flag(string $flag): bool
     {
-        if ($this->overrides->has($flag)) {
-            return $this->overrides->get($flag);
-        }
-
         if (!$this->client) {
             return false;
         }

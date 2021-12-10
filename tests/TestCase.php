@@ -4,7 +4,9 @@ namespace Worksome\FeatureFlags\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\FeatureFlagsServiceProvider;
+use Worksome\FeatureFlags\Providers\FakeProvider;
 
 class TestCase extends Orchestra
 {
@@ -14,6 +16,11 @@ class TestCase extends Orchestra
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Worksome\\FeatureFlags\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+        );
+
+        $this->app->singleton(
+            FeatureFlagsProvider::class,
+            static fn () => new FakeProvider()
         );
     }
 
