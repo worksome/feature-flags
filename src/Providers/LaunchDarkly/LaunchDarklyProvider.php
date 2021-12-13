@@ -38,7 +38,9 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 
     public function setUser(FeatureFlagUser $user): void
     {
-        $this->user = (new LDUserBuilder($user->id))
+        $id = (string) $user->id;
+
+        $this->user = (new LDUserBuilder($id))
             ->email($user->email)
             ->custom($user->custom)
             ->build();
