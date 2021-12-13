@@ -24,6 +24,8 @@ php artisan vendor:publish --tag="feature-flags_without_prefix-config"
 This is the contents of the published config file:
 
 ```php
+declare(strict_types=1);
+
 use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
 
 // config for Worksome/FeatureFlags

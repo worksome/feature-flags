@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
 
 // config for Worksome/FeatureFlags
