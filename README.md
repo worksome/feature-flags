@@ -60,7 +60,7 @@ return [
 
 ```php
 @feature('feature-flag')
-    This is content under a featre flag.
+    This is content under a feature flag.
 @endfeature
 ```
 
