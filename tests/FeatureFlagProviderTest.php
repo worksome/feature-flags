@@ -40,3 +40,20 @@ it('should succesfully follow the override for a feature flag', function () {
     expect(Config::get('feature-flags.overrides.amazing-feature'))->toBe(true);
     expect($this->provider->flag('amazing-feature'))->toBe(true);
 });
+
+it('should correctly overide all feature flags if value is set', function () {
+    $this->fakeProvider->setFlag('flag-1', true);
+    $this->fakeProvider->setFlag('flag-2', false);
+    $this->fakeProvider->setFlag('flag-3', false);
+
+
+    expect($this->provider->flag('flag-1'))->toBe(true);
+    expect($this->provider->flag('flag-2'))->toBe(false);
+    expect($this->provider->flag('flag-3'))->toBe(false);
+
+    Config::set('feature-flags.override-all', true);
+
+    expect($this->provider->flag('flag-1'))->toBe(true);
+    expect($this->provider->flag('flag-2'))->toBe(true);
+    expect($this->provider->flag('flag-3'))->toBe(true);
+});
