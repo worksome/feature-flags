@@ -51,7 +51,7 @@ return [
      * This is particularly useful for running things in the CI,
      * e.g. Cypress tests.
      */
-    'override-all' => env('FEATURE_FLAGS_ENABLE_ALL'),
+    'override-all' => env('FEATURE_FLAGS_OVERRIDE_ALL'),
 
     /**
      * Override flags. If a feature flag is set inside an override,
