@@ -24,6 +24,8 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
     {
         /** @var array<string,mixed> */
         $config = Config::get('feature-flags.providers.launchdarkly.options', []);
+
+        /** @var array<string,mixed> */
         $options = array_merge([
             'event_publisher' => Guzzle::eventPublisher()
         ], $config);
@@ -32,6 +34,7 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
         $key = Config::get('feature-flags.providers.launchdarkly.key');
 
         if ($key) {
+            /**  @phpstan-ignore-next-line  */
             $this->client = new LDClient($key, $options);
         }
     }
