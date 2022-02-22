@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "nunomaduro/collision": "5.11.0",
-        "orchestra/testbench": "7.0.2",
+        "orchestra/testbench": "6.24.1",
         "pestphp/pest": "1.21.1",
         "pestphp/pest-plugin-parallel": "1.0.0",
         "pestphp/pest-plugin-laravel": "1.2.0",
@@ -53,7 +53,12 @@
         ]
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "worksome/coding-style": true
+        }
     },
     "extra": {
         "laravel": {
