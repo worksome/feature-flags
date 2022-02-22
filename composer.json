@@ -22,7 +22,7 @@
         "spatie/laravel-package-tools": "^1.9.2"
     },
     "require-dev": {
-        "nunomaduro/collision": "5.11.0",
+        "nunomaduro/collision": "6.1.0",
         "orchestra/testbench": "7.0.2",
         "pestphp/pest": "1.21.1",
         "pestphp/pest-plugin-parallel": "1.0.0",
