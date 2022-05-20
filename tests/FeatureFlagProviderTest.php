@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Worksome\FeatureFlags\FeatureFlagsOverridesRepository;
