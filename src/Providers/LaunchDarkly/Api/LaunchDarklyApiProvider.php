@@ -35,7 +35,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
     private function headers(): array
     {
         return [
-            'Authorization' => Config::get('feature-flags.api.access-token'),
+            'Authorization' => Config::get('feature-flags.providers.launchdarkly.access-token'),
             'Content-Type' => 'application/json; domain-model=launchdarkly.semanticpatch'
         ];
     }
