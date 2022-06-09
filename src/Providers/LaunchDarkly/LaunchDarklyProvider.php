@@ -14,7 +14,7 @@ use Worksome\FeatureFlags\FeatureFlagUser;
 
 class LaunchDarklyProvider implements FeatureFlagsProvider
 {
-    /** @var \LaunchDarkly\LDClient|null */
+    /** @var LDClient|null */
     protected $client;
 
     /** @var LDUser */
@@ -58,10 +58,16 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 
     public function flag(string $flag): bool
     {
-        if (!$this->client) {
+        $client = $this->client;
+
+        if ($client === null) {
             return false;
         }
 
-        return filter_var($this->client->variation($flag, $this->user), FILTER_VALIDATE_BOOLEAN);
+        if ($this->user === null) {
+            $this->setAnonymousUser();
+        }
+
+        return filter_var($client->variation($flag, $this->user), FILTER_VALIDATE_BOOLEAN);
     }
 }
