@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 use GuzzleHttp\RequestOptions;
 use Throwable;
 
-class LaunchDarklyProvider implements FeatureFlagsApiProvider
+class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
 {
     public function __construct(
         private string $environmentKey = 'testing',
