@@ -8,7 +8,7 @@ trait InteractsWithFeatureFlags
 {
     public function switchFeatureFlag(string $key, bool $onOff): void
     {
-        $this->app['config']->set('feature-flags.overrides.'.$key, $onOff);
+        $this->app['config']->set('feature-flags.overrides.' . $key, $onOff);
     }
 
     public function enableFeatureFlag(string $key): void
