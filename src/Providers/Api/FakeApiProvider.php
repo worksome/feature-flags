@@ -7,11 +7,14 @@ namespace Worksome\FeatureFlags\Providers\Api;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
 use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 
 class FakeApiProvider implements FeatureFlagsApiProvider
 {
     public function __construct(
-        private ResponseInterface $response,
         private bool $hasAccessToken = true,
     ) {
         if (! $hasAccessToken) {
@@ -30,12 +33,12 @@ class FakeApiProvider implements FeatureFlagsApiProvider
 
     public function get(string $featureFlagKey): ResponseInterface
     {
-        return $this->response;
+        return $this->response();
     }
 
     public function clearRules(string $featureFlagKey): ResponseInterface
     {
-        return $this->response;
+        return $this->response();
     }
 
     public function addRuleForEmailAddresses(
@@ -43,16 +46,28 @@ class FakeApiProvider implements FeatureFlagsApiProvider
         bool $featureFlagValue,
         array $emailAddresses,
     ): ResponseInterface {
-        return $this->response;
+        return $this->response();
     }
 
     public function enable(string $featureFlagKey): ResponseInterface
     {
-        return $this->response;
+        return $this->response();
     }
 
     public function disable(string $featureFlagKey): ResponseInterface
     {
-        return $this->response;
+        return $this->response();
+    }
+
+    private function response(): ResponseInterface
+    {
+        $mock = new MockHandler([
+            new Response(200, ['X-Foo' => 'Bar'], 'Hello, World'),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handlerStack]);
+        $response = $client->request('GET', '/');
+
+        return $response;
     }
 }

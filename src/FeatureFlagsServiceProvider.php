@@ -8,6 +8,7 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider as FeatureFlagsProviderContract;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider as FeatureFlagsApiProviderContract;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
@@ -59,6 +60,15 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
         );
 
         $this->app->singleton(
+            FeatureFlagsApiProviderContract::class,
+            function (Container $app) {
+                /** @var FeatureFlagsApiManager $manager */
+                $manager = $app->get(FeatureFlagsApiManager::class);
+                return $manager->driver();
+            }
+        );
+
+        $this->app->singleton(
             FeatureFlagUserConvertor::class,
             function (Container $app) {
                 /** @var Application $app */
@@ -77,8 +87,9 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
     {
         return [
             FeatureFlagsProviderContract::class,
+            FeatureFlagsApiProviderContract::class,
             FeatureFlagsManager::class,
-            FeatureFlagUserConvertor::class
+            FeatureFlagUserConvertor::class,
         ];
     }
 
