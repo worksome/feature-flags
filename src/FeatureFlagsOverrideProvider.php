@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags;
 
+use Worksome\FeatureFlags\Contracts\FeatureFlagOverrider;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 
 class FeatureFlagsOverrideProvider implements FeatureFlagsProvider
 {
+
     public function __construct(
         private FeatureFlagsProvider $provider,
-        private FeatureFlagsOverridesRepository $overrides,
+        private FeatureFlagOverrider $overrides,
     ) {
     }
 
     public function flag(string $flag): bool
     {
+        if ($this->overrides->hasAll()) {
+            return $this->overrides->getAll();
+        }
+
         if ($this->overrides->has($flag)) {
             return $this->overrides->get($flag);
         }
