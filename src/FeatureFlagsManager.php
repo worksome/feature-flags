@@ -6,15 +6,23 @@ namespace Worksome\FeatureFlags;
 
 use Illuminate\Support\Manager;
 use JetBrains\PhpStorm\Pure;
+use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Providers\FakeProvider;
 use Worksome\FeatureFlags\Providers\LaunchDarkly\LaunchDarklyProvider;
 
 class FeatureFlagsManager extends Manager
 {
-    #[Pure]
     public function createLaunchDarklyDriver(): LaunchDarklyProvider
     {
-        return new LaunchDarklyProvider();
+        /** @var array $config */
+        $config = $this->config->get('feature-flags.providers.launchdarkly');
+        /** @var LoggerInterface $logger */
+        $logger = $this->getContainer()->get(LoggerInterface::class);
+
+        return new LaunchDarklyProvider(
+            $config,
+            $logger,
+        );
     }
 
     #[Pure]
@@ -23,7 +31,6 @@ class FeatureFlagsManager extends Manager
         return new FakeProvider();
     }
 
-    #[Pure]
     public function getDefaultDriver(): string
     {
         return strval($this->config->get('feature-flags.default'));

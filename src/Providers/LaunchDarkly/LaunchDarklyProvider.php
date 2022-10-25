@@ -4,34 +4,34 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\LaunchDarkly;
 
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Arr;
 use LaunchDarkly\LDClient;
 use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
 use LaunchDarkly\Integrations\Guzzle;
+use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\FeatureFlagUser;
 
 class LaunchDarklyProvider implements FeatureFlagsProvider
 {
-    /** @var LDClient|null */
-    protected $client;
+    protected LDClient|null $client;
 
-    /** @var LDUser */
-    private $user;
+    private LDUser|null $user;
 
-    public function __construct()
+    public function __construct(array $config, LoggerInterface $logger)
     {
         /** @var array<string,mixed> */
-        $config = Config::get('feature-flags.providers.launchdarkly.options', []);
+        $config = Arr::get($config, 'options', []);
 
         /** @var array<string,mixed> */
         $options = array_merge([
-            'event_publisher' => Guzzle::eventPublisher()
+            'event_publisher' => Guzzle::eventPublisher(),
+            'logger' => $logger,
         ], $config);
 
         /** @var string $key */
-        $key = Config::get('feature-flags.providers.launchdarkly.key');
+        $key = Arr::get($config, 'key');
 
         if ($key) {
             /**  @phpstan-ignore-next-line  */
@@ -68,6 +68,7 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
             $this->setAnonymousUser();
         }
 
+        assert($this->user !== null);
         return filter_var($client->variation($flag, $this->user), FILTER_VALIDATE_BOOLEAN);
     }
 }
