@@ -15,9 +15,9 @@ use Worksome\FeatureFlags\FeatureFlagUser;
 
 class LaunchDarklyProvider implements FeatureFlagsProvider
 {
-    protected LDClient|null $client;
+    protected LDClient|null $client = null;
 
-    private LDUser|null $user;
+    private LDUser|null $user = null;
 
     public function __construct(array $config, LoggerInterface $logger)
     {
