@@ -22,13 +22,13 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
     public function __construct(array $config, LoggerInterface $logger)
     {
         /** @var array<string,mixed> */
-        $config = Arr::get($config, 'options', []);
+        $options = Arr::get($config, 'options', []);
 
         /** @var array<string,mixed> */
         $options = array_merge([
             'event_publisher' => Guzzle::eventPublisher(),
             'logger' => $logger,
-        ], $config);
+        ], $options);
 
         /** @var string $key */
         $key = Arr::get($config, 'key');
