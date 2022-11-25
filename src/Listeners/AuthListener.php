@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Listeners;
 
-use Worksome\FeatureFlags\Facades\Feature;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Events\Dispatcher;
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
+use Worksome\FeatureFlags\Facades\Feature;
 
 class AuthListener
 {

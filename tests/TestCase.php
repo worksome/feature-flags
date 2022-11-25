@@ -17,7 +17,9 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Worksome\\FeatureFlags\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'Worksome\\FeatureFlags\\Database\\Factories\\' . class_basename(
+                $modelName
+            ) . 'Factory'
         );
 
         $this->app->singleton(

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Worksome\FeatureFlags\Providers\Api\FakeApiProvider;
 use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
+use Worksome\FeatureFlags\Providers\Api\FakeApiProvider;
 
 it('should throw exception if access token is missing', function () {
     $this->fakeProvider = new FakeApiProvider(false);

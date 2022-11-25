@@ -9,7 +9,7 @@ use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 
 class Feature extends Facade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return FeatureFlagsProvider::class;
     }
