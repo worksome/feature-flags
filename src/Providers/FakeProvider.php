@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers;
 
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\FeatureFlagUser;
 
 class FakeProvider implements FeatureFlagsProvider
 {
     /** @var string|FeatureFlagUser */
-    public $user;
+    public string|FeatureFlagUser $user;
 
-    /** @var array<string,bool> */
-    private $flags = [];
+    /** @var array<string, bool> */
+    private array $flags = [];
 
     public function setUser(FeatureFlagUser $user): void
     {
@@ -25,17 +26,17 @@ class FakeProvider implements FeatureFlagsProvider
         $this->user = 'anonymous';
     }
 
-    public function flag(string $flag): bool
+    public function flag(FeatureFlagEnum $flag): bool
     {
-        if (!isset($this->flags[$flag])) {
+        if (! isset($this->flags[$flag->value])) {
             return false;
         }
 
-        return $this->flags[$flag];
+        return $this->flags[$flag->value];
     }
 
-    public function setFlag(string $key, bool $value): void
+    public function setFlag(FeatureFlagEnum $key, bool $value): void
     {
-        $this->flags[$key] = $value;
+        $this->flags[$key->value] = $value;
     }
 }

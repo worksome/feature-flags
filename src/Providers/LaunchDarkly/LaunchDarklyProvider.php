@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\LaunchDarkly;
 
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Illuminate\Support\Arr;
+use LaunchDarkly\Integrations\Guzzle;
 use LaunchDarkly\LDClient;
 use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
-use LaunchDarkly\Integrations\Guzzle;
 use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\FeatureFlagUser;
@@ -21,16 +22,16 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 
     public function __construct(array $config, LoggerInterface $logger)
     {
-        /** @var array<string,mixed> */
+        /** @var array<string, mixed> $options */
         $options = Arr::get($config, 'options', []);
 
-        /** @var array<string,mixed> */
+        /** @var array<string, mixed> $options */
         $options = array_merge([
             'event_publisher' => Guzzle::eventPublisher(),
             'logger' => $logger,
         ], $options);
 
-        /** @var string $key */
+        /** @var string|null $key */
         $key = Arr::get($config, 'key');
 
         if ($key) {
@@ -56,8 +57,10 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
             ->build();
     }
 
-    public function flag(string $flag): bool
+    public function flag(FeatureFlagEnum $flag): bool
     {
+        assert(is_string($flag->value));
+
         $client = $this->client;
 
         if ($client === null) {
@@ -69,6 +72,6 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
         }
 
         assert($this->user !== null);
-        return filter_var($client->variation($flag, $this->user), FILTER_VALIDATE_BOOLEAN);
+        return filter_var($client->variation($flag->value, $this->user), FILTER_VALIDATE_BOOLEAN);
     }
 }

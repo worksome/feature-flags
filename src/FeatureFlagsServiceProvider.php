@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags;
 
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
-use Worksome\FeatureFlags\Contracts\FeatureFlagOverrider;
-use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider as FeatureFlagsProviderContract;
-use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider as FeatureFlagsApiProviderContract;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
+use Worksome\FeatureFlags\Contracts\FeatureFlagOverrider;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider as FeatureFlagsApiProviderContract;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider as FeatureFlagsProviderContract;
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
 use Worksome\FeatureFlags\Facades\Feature;
 use Worksome\FeatureFlags\Listeners\AuthListener;
@@ -29,7 +30,7 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
         }
 
         $this->publishes([
-            __DIR__ . '/../config/feature-flags.php' => config_path('feature-flags.php'),
+            __DIR__ . '/../config/feature-flags.php' => $this->app->configPath('feature-flags.php'),
         ]);
     }
 
@@ -77,7 +78,8 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
             }
         );
 
-        $this->app->singleton(FeatureFlagOverrider::class,
+        $this->app->singleton(
+            FeatureFlagOverrider::class,
             function (Container $app) {
                 /** @var ConfigRepository $config */
                 $config = $app->get('config');
@@ -86,7 +88,8 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
                 $convertor = $config->get('feature-flags.overrider');
 
                 return $app->get($convertor);
-            });
+            }
+        );
         $this->registerBlade();
     }
 
@@ -103,7 +106,7 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
 
     private function registerBlade(): void
     {
-        Blade::if('feature', function (string $flag) {
+        Blade::if('feature', function (FeatureFlagEnum $flag) {
             return Feature::flag($flag);
         });
     }

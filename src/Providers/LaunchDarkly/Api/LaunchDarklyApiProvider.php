@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\LaunchDarkly\Api;
 
-use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyUnavailableException;
-use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
-use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use GuzzleHttp\Client as GuzzleHttpClient;
-use Psr\Http\Message\ResponseInterface;
-use Illuminate\Support\Facades\Config;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Facades\Config;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
+use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
+use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyUnavailableException;
 
 class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
 {
     public function __construct(
-        private string $environmentKey = 'testing',
-        private string $projectKey = 'default',
+        private readonly string $environmentKey = 'testing',
+        private readonly string $projectKey = 'default',
     ) {
-        if (!Config::get('feature-flags.providers.launchdarkly.access-token')) {
+        if (! Config::get('feature-flags.providers.launchdarkly.access-token')) {
             throw new LaunchDarklyMissingAccessTokenException();
         }
     }
@@ -50,17 +51,17 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
                 ]
             );
 
-            return !empty($request->getBody()->getContents());
+            return ! empty($request->getBody()->getContents());
         } catch (Throwable) {
             throw new LaunchDarklyUnavailableException();
         }
     }
 
-    public function get(string $featureFlagKey): ResponseInterface
+    public function get(FeatureFlagEnum $featureFlagKey): ResponseInterface
     {
         try {
             return $this->client()->get(
-                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey),
+                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey->value),
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
@@ -73,7 +74,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
         }
     }
 
-    private function getVariationId(string $featureFlagKey, bool $variationValue): ?string
+    private function getVariationId(FeatureFlagEnum $featureFlagKey, bool $variationValue): ?string
     {
         try {
             $featureFlag = $this->get($featureFlagKey);
@@ -93,13 +94,13 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
     }
 
     private function enableOrDisableInstruction(
-        string $featureFlagKey,
+        FeatureFlagEnum $featureFlagKey,
         string $instruction,
         string $comment = 'Updated via the API.',
     ): ResponseInterface {
         try {
             return $this->client()->patch(
-                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey),
+                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey->value),
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
@@ -119,12 +120,12 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
     }
 
     public function clearRules(
-        string $featureFlagKey,
+        FeatureFlagEnum $featureFlagKey,
         string $comment = 'Updated via the API.',
     ): ResponseInterface {
         try {
             return $this->client()->patch(
-                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey),
+                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey->value),
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
@@ -148,7 +149,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
      * Clears all previous rules and creates a new rule
      */
     public function addRuleForEmailAddresses(
-        string $featureFlagKey,
+        FeatureFlagEnum $featureFlagKey,
         bool $featureFlagValue,
         array $emailAddresses,
         string $comment = 'Updated via the API.',
@@ -162,7 +163,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
 
             // add the rule
             return $this->client()->patch(
-                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey),
+                sprintf('/api/v2/flags/%s/%s', $this->projectKey, $featureFlagKey->value),
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
@@ -190,12 +191,12 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
         }
     }
 
-    public function enable(string $featureFlagKey, string $comment = ''): ResponseInterface
+    public function enable(FeatureFlagEnum $featureFlagKey, string $comment = ''): ResponseInterface
     {
         return $this->enableOrDisableInstruction($featureFlagKey, 'turnFlagOn', $comment);
     }
 
-    public function disable(string $featureFlagKey, string $comment = ''): ResponseInterface
+    public function disable(FeatureFlagEnum $featureFlagKey, string $comment = ''): ResponseInterface
     {
         return $this->enableOrDisableInstruction($featureFlagKey, 'turnFlagOff', $comment);
     }

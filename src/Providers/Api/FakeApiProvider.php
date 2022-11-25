@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\Api;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
-use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
-use Psr\Http\Message\ResponseInterface;
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
+use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
 
 class FakeApiProvider implements FeatureFlagsApiProvider
 {
     public function __construct(
-        private bool $hasAccessToken = true,
+        private readonly bool $hasAccessToken = true,
     ) {
         if (! $hasAccessToken) {
             throw new LaunchDarklyMissingAccessTokenException();
@@ -24,37 +25,37 @@ class FakeApiProvider implements FeatureFlagsApiProvider
 
     public function isAccessTokenValid(): bool
     {
-        if (!$this->hasAccessToken) {
+        if (! $this->hasAccessToken) {
             return false;
         }
 
         return true;
     }
 
-    public function get(string $featureFlagKey): ResponseInterface
+    public function get(FeatureFlagEnum $featureFlagKey): ResponseInterface
     {
         return $this->response();
     }
 
-    public function clearRules(string $featureFlagKey): ResponseInterface
+    public function clearRules(FeatureFlagEnum $featureFlagKey): ResponseInterface
     {
         return $this->response();
     }
 
     public function addRuleForEmailAddresses(
-        string $featureFlagKey,
+        FeatureFlagEnum $featureFlagKey,
         bool $featureFlagValue,
         array $emailAddresses,
     ): ResponseInterface {
         return $this->response();
     }
 
-    public function enable(string $featureFlagKey): ResponseInterface
+    public function enable(FeatureFlagEnum $featureFlagKey): ResponseInterface
     {
         return $this->response();
     }
 
-    public function disable(string $featureFlagKey): ResponseInterface
+    public function disable(FeatureFlagEnum $featureFlagKey): ResponseInterface
     {
         return $this->response();
     }
