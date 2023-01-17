@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\LaunchDarkly\Api;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\RequestOptions;
-use Illuminate\Support\Facades\Config;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
-use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
 use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyUnavailableException;
 
 class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
 {
     public function __construct(
+        private readonly string $accessToken,
         private readonly string $environmentKey = 'testing',
         private readonly string $projectKey = 'default',
     ) {
-        if (! Config::get('feature-flags.providers.launchdarkly.access-token')) {
-            throw new LaunchDarklyMissingAccessTokenException();
-        }
     }
 
     private function client(): GuzzleHttpClient
@@ -36,7 +32,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
     private function headers(): array
     {
         return [
-            'Authorization' => Config::get('feature-flags.providers.launchdarkly.access-token'),
+            'Authorization' => $this->accessToken,
             'Content-Type' => 'application/json; domain-model=launchdarkly.semanticpatch'
         ];
     }

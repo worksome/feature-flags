@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\Api;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider;
 use Worksome\FeatureFlags\Exceptions\LaunchDarkly\LaunchDarklyMissingAccessTokenException;
 
