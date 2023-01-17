@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Providers\LaunchDarkly;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Illuminate\Support\Arr;
 use LaunchDarkly\Integrations\Guzzle;
 use LaunchDarkly\LDClient;
 use LaunchDarkly\LDUser;
 use LaunchDarkly\LDUserBuilder;
 use Psr\Log\LoggerInterface;
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\FeatureFlagUser;
 

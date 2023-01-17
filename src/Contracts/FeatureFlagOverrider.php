@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Contracts;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
-
 interface FeatureFlagOverrider
 {
     public function has(FeatureFlagEnum $key): bool;

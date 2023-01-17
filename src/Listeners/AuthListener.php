@@ -8,24 +8,25 @@ use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Events\Dispatcher;
+use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
-use Worksome\FeatureFlags\Facades\Feature;
 
-class AuthListener
+readonly class AuthListener
 {
     public function __construct(
         private FeatureFlagUserConvertor $convertor,
+        private FeatureFlagsProvider $featureFlags,
     ) {
     }
 
     public function handleUserAuth(Authenticated|Login $event): void
     {
-        Feature::setUser($this->convertor->convert($event->user));
+        $this->featureFlags->setUser($this->convertor->convert($event->user));
     }
 
     public function handleUserLogout(Logout $event): void
     {
-        Feature::setAnonymousUser();
+        $this->featureFlags->setAnonymousUser();
     }
 
     public function subscribe(Dispatcher $events): void

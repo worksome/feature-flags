@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags\Contracts;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Psr\Http\Message\ResponseInterface;
 
 interface FeatureFlagsApiProvider

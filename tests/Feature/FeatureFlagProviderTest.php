@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Worksome\FeatureFlags\FeatureFlagsOverrideProvider;
@@ -11,7 +12,10 @@ use Worksome\FeatureFlags\Tests\Enums\TestFeatureFlag;
 
 beforeEach(function () {
     $this->fakeProvider = new FakeProvider();
-    $this->provider = new FeatureFlagsOverrideProvider($this->fakeProvider, new ConfigOverrider());
+    $this->provider = new FeatureFlagsOverrideProvider(
+        $this->fakeProvider,
+        new ConfigOverrider($this->app->get(Repository::class))
+    );
 });
 
 it('should return true if flag is set to true', function () {

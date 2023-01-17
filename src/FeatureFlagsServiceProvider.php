@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Worksome\FeatureFlags;
 
-use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Event;
+use Illuminate\View\Compilers\BladeCompiler;
+use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagOverrider;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsApiProvider as FeatureFlagsApiProviderContract;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider as FeatureFlagsProviderContract;
 use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
-use Worksome\FeatureFlags\Facades\Feature;
 use Worksome\FeatureFlags\Listeners\AuthListener;
 
 class FeatureFlagsServiceProvider extends EventServiceProvider
@@ -25,13 +24,17 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
 
     public function boot(): void
     {
-        foreach ($this->subscribe as $subscriber) {
-            Event::subscribe($subscriber);
-        }
+        $this->callAfterResolving(Dispatcher::class, function (Dispatcher $event) {
+            foreach ($this->subscribe as $subscriber) {
+                $event->subscribe($subscriber);
+            }
+        });
 
         $this->publishes([
             __DIR__ . '/../config/feature-flags.php' => $this->app->configPath('feature-flags.php'),
         ]);
+
+        $this->registerBlade();
     }
 
     public function register(): void
@@ -90,7 +93,6 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
                 return $app->get($convertor);
             }
         );
-        $this->registerBlade();
     }
 
     public function provides(): array
@@ -106,8 +108,12 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
 
     private function registerBlade(): void
     {
-        Blade::if('feature', function (FeatureFlagEnum $flag) {
-            return Feature::flag($flag);
+        $this->callAfterResolving(BladeCompiler::class, function (BladeCompiler $blade) {
+            $blade->if('feature', function (FeatureFlagEnum $flag) {
+                /** @var FeatureFlagsProviderContract $featureFlag */
+                $featureFlag = $this->app->get(FeatureFlagsProviderContract::class);
+                return $featureFlag->flag($flag);
+            });
         });
     }
 }

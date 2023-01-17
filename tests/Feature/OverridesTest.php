@@ -10,7 +10,7 @@ use Worksome\FeatureFlags\Tests\Enums\TestFeatureFlag;
 
 beforeEach(function () {
     $this->configRepo = $this->app->make(Repository::class);
-    $this->configOverrides = new ConfigOverrider();
+    $this->configOverrides = new ConfigOverrider($this->configRepo);
 });
 
 test('has returns false if override key is not present', function () {
