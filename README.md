@@ -71,12 +71,6 @@ return [
 @endfeature
 ```
 
-## Testing
-
-```bash
-composer test
-```
-
 ## Changelog
 
 Please see the [Releases](https://github.com/worksome/feature-flags/releases) for more information on what has changed recently.
