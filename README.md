@@ -95,7 +95,13 @@ with all the necessary dependencies installed. Assuming you have docker installe
 ```bash
 docker-compose run --rm composer install # Only needed the first time
 docker-compose run --rm composer test # Run tests and static analysis 
-``` 
+```
+
+Support for XDebug is baked into the Docker image, you just need to configure the `XDEBUG_MODE` environment variable:
+
+```bash
+docker-compose run --rm -e XDEBUG_MODE=debug php
+```
 
 ## Security Vulnerabilities
 
