@@ -12,3 +12,5 @@
 /psalm.xml          export-ignore
 /psalm.xml.dist     export-ignore
 /testbench.yaml     export-ignore
+/docker             export-ignore
+docker-compose.yml  export-ignore
