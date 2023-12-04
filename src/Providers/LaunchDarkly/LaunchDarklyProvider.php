@@ -34,7 +34,6 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
         $key = Arr::get($config, 'key');
 
         if ($key) {
-            /**  @phpstan-ignore-next-line */
             $this->client = new LDClient($key, $options);
         }
     }
