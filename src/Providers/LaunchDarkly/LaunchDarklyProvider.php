@@ -7,8 +7,7 @@ namespace Worksome\FeatureFlags\Providers\LaunchDarkly;
 use Illuminate\Support\Arr;
 use LaunchDarkly\Integrations\Guzzle;
 use LaunchDarkly\LDClient;
-use LaunchDarkly\LDUser;
-use LaunchDarkly\LDUserBuilder;
+use LaunchDarkly\LDContext;
 use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
@@ -18,7 +17,7 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
 {
     protected LDClient|null $client = null;
 
-    private LDUser|null $user = null;
+    private LDContext|null $context = null;
 
     public function __construct(array $config, LoggerInterface $logger)
     {
@@ -35,7 +34,7 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
         $key = Arr::get($config, 'key');
 
         if ($key) {
-            /**  @phpstan-ignore-next-line  */
+            /**  @phpstan-ignore-next-line */
             $this->client = new LDClient($key, $options);
         }
     }
@@ -44,15 +43,19 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
     {
         $id = (string) $user->id;
 
-        $this->user = (new LDUserBuilder($id))
-            ->email($user->email)
-            ->custom($user->custom)
-            ->build();
+        $builder = LDContext::builder($id)
+            ->set('email', $user->email);
+
+        foreach ($user->custom as $key => $value) {
+            $builder->set($key, $value);
+        }
+
+        $this->context = $builder->build();
     }
 
     public function setAnonymousUser(): void
     {
-        $this->user = (new LDUserBuilder('anonymous'))
+        $this->context = LDContext::builder('anonymous')
             ->anonymous(true)
             ->build();
     }
@@ -67,11 +70,12 @@ class LaunchDarklyProvider implements FeatureFlagsProvider
             return false;
         }
 
-        if ($this->user === null) {
+        if ($this->context === null) {
             $this->setAnonymousUser();
         }
 
-        assert($this->user !== null);
-        return filter_var($client->variation($flag->value, $this->user), FILTER_VALIDATE_BOOLEAN);
+        assert($this->context !== null);
+
+        return filter_var($client->variation($flag->value, $this->context), FILTER_VALIDATE_BOOLEAN);
     }
 }
