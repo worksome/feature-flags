@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Worksome\FeatureFlags;
 
 use Illuminate\Support\Manager;
-use JetBrains\PhpStorm\Pure;
 use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Providers\FakeProvider;
 use Worksome\FeatureFlags\Providers\LaunchDarkly\LaunchDarklyProvider;
@@ -25,7 +24,6 @@ class FeatureFlagsManager extends Manager
         );
     }
 
-    #[Pure]
     public function createFakeDriver(): FakeProvider
     {
         return new FakeProvider();
@@ -33,6 +31,6 @@ class FeatureFlagsManager extends Manager
 
     public function getDefaultDriver(): string
     {
-        return strval($this->config->get('feature-flags.default'));
+        return strval($this->config->get('feature-flags.default')); // @phpstan-ignore-line
     }
 }
