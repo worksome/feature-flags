@@ -19,7 +19,7 @@
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.5",
         "illuminate/contracts": "^10.0",
-        "launchdarkly/server-sdk": "^4.2",
+        "launchdarkly/server-sdk": "^6.0",
         "spatie/laravel-package-tools": "^1.14.1"
     },
     "require-dev": {
@@ -27,7 +27,7 @@
         "orchestra/testbench": "^8.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
-        "worksome/coding-style": "^2.5"
+        "worksome/coding-style": "^2.6.1"
     },
     "autoload": {
         "psr-4": {
