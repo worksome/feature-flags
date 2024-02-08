@@ -18,7 +18,7 @@ composer require worksome/feature-flags
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="feature-flags_without_prefix-config"
+php artisan vendor:publish --tag="feature-flags-config"
 ```
 
 This is the contents of the published config file:
@@ -63,10 +63,27 @@ return [
 ];
 ```
 
+### Creating Feature Flags
+
+Feature flags should be registered using one or more enums containing your feature flags.
+
+All feature flag enums must implement the `Worksome\FeatureFlags\Contracts\FeatureFlagEnum` contract.
+
+For example, if you had a feature flag called `flag-one`, you could create an enum with the following:
+
+```php
+namespace App\Enums;
+
+enum FeatureFlag: string implements \Worksome\FeatureFlags\Contracts\FeatureFlagEnum
+{
+    case FlagOne = 'flag-one';
+}
+```
+
 ## Usage in Blade
 
 ```php
-@feature('feature-flag')
+@feature(\App\Enums\FeatureFlag::FlagOne)
     This is content under a feature flag.
 @endfeature
 ```
