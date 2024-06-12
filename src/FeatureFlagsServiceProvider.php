@@ -44,22 +44,32 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
             'feature-flags'
         );
 
-        $this->app->extend(FeatureFlagsProviderContract::class, function ($provider, Container $app) {
-            return $app->makeWith(FeatureFlagsOverrideProvider::class, [
-                'provider' => $provider,
-            ]);
-        });
+        $this->app->singleton(FeatureFlagsManager::class);
 
-        $this->app->singleton(
-            FeatureFlagsManager::class,
-            static fn (Container $container) => new FeatureFlagsManager($container)
-        );
+        $this->app->singleton(FeatureFlagsOverriderManager::class);
+
 
         $this->app->singleton(FeatureFlagsProviderContract::class, function (Container $app) {
             /** @var FeatureFlagsManager $manager */
             $manager = $app->get(FeatureFlagsManager::class);
 
             return $manager->driver();
+        });
+
+        $this->app->singleton(
+            FeatureFlagOverrider::class,
+            function (Container $app) {
+                /** @var FeatureFlagsOverriderManager $manager */
+                $manager = $app->get(FeatureFlagsOverriderManager::class);
+
+                return $manager->driver();
+            }
+        );
+
+        $this->app->extend(FeatureFlagsProviderContract::class, function ($provider, Container $app) {
+            return $app->makeWith(FeatureFlagsOverrideProvider::class, [
+                'provider' => $provider,
+            ]);
         });
 
         $this->app->singleton(FeatureFlagUserConvertor::class, function (Container $app) {
@@ -78,19 +88,6 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
                 /** @var FeatureFlagsApiManager $manager */
                 $manager = $app->get(FeatureFlagsApiManager::class);
                 return $manager->driver();
-            }
-        );
-
-        $this->app->singleton(
-            FeatureFlagOverrider::class,
-            function (Container $app) {
-                /** @var ConfigRepository $config */
-                $config = $app->get('config');
-
-                /** @var class-string<FeatureFlagOverrider> $convertor */
-                $convertor = $config->get('feature-flags.overrider');
-
-                return $app->get($convertor);
             }
         );
     }

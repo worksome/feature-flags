@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
-use Worksome\FeatureFlags\Overriders\ConfigOverrider;
 
 // config for Worksome/FeatureFlags
 return [
@@ -17,7 +16,7 @@ return [
     /**
      * Overrides implementing FeatureFlagOverrider contract
      */
-    'overrider' => ConfigOverrider::class,
+    'overrider' => 'config',
 
     'providers' => [
         'launchdarkly' => [
@@ -36,24 +35,39 @@ return [
     ],
 
     /**
-     * Overrides all feature flags directly without hitting the provider.
-     * This is particularly useful for running things in the CI,
-     * e.g. Cypress tests.
+     * List of available overriders.
+     * Key is to be used to specify which overrider should be active
      *
-     * Be careful in setting a default value as said value will be applied to all flags.
-     * Use `null` value if needing the key to be present but act as if it was not
      */
-    'override-all' => env('FEATURE_FLAGS_OVERRIDE_ALL'),
+    'overriders' => [
+        'config' => [
+            /**
+             * Overrides all feature flags directly without hitting the provider.
+             * This is particularly useful for running things in the CI,
+             * e.g. Cypress tests.
+             *
+             * Be careful in setting a default value as said value will be applied to all flags.
+             * Use `null` value if needing the key to be present but act as if it was not
+             */
+            'override-all' => null,
 
-    /**
-     * Override flags. If a feature flag is set inside an override,
-     * it will be used instead of the flag set in the provider.
-     *
-     * Usage: ['feature-flag-key' => true]
-     *
-     * Be careful in setting a default value as it will be applied.
-     * Use `null` value if needing the key to be present but act as if it was not
-     *
-     */
-    'overrides' => [],
+            /**
+             * Override flags. If a feature flag is set inside an override,
+             * it will be used instead of the flag set in the provider.
+             *
+             * Usage: ['feature-flag-key' => true]
+             *
+             * Be careful in setting a default value as it will be applied.
+             * Use `null` value if needing the key to be present but act as if it was not
+             *
+             */
+            'overrides' => [
+                //
+            ],
+        ],
+        'in-memory' => [
+            //
+        ]
+    ],
+
 ];
