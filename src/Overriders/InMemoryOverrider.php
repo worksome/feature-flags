@@ -14,6 +14,7 @@ class InMemoryOverrider implements FeatureFlagOverrider
      * @var array<string, bool|null> $overrides
      */
     private array $overrides = [];
+
     /**
      * @var bool|null $overrideAll
      */
@@ -30,7 +31,7 @@ class InMemoryOverrider implements FeatureFlagOverrider
 
     public function get(FeatureFlagEnum $key): bool
     {
-        return (bool)Arr::get($this->overrides, $key->value, false);
+        return (bool) Arr::get($this->overrides, $key->value, false);
     }
 
     /**
@@ -43,7 +44,7 @@ class InMemoryOverrider implements FeatureFlagOverrider
 
     public function getAll(): bool
     {
-        return (bool)$this->overrideAll;
+        return (bool) $this->overrideAll;
     }
 
     public function setAll(bool|null $value = null): static
