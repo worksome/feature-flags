@@ -14,9 +14,8 @@ class FeatureFlagsApiManager extends Manager
     public function createLaunchDarklyDriver(): LaunchDarklyApiProvider
     {
         $token = $this->config->get('feature-flags.providers.launchdarkly.access-token');
-        if (! is_string($token)) {
-            throw new LaunchDarklyMissingAccessTokenException();
-        }
+
+        assert(is_string($token), new LaunchDarklyMissingAccessTokenException());
 
         return new LaunchDarklyApiProvider(
             accessToken: $token,

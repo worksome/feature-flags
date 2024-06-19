@@ -20,13 +20,13 @@ readonly class ConfigOverrider implements FeatureFlagOverrider
      */
     public function has(FeatureFlagEnum $key): bool
     {
-        return $this->config->has(sprintf('feature-flags.overrides.%s', $key->value))
-               && $this->config->get(sprintf('feature-flags.overrides.%s', $key->value)) !== null;
+        return $this->config->has(sprintf('feature-flags.overriders.config.overrides.%s', $key->value))
+            && $this->config->get(sprintf('feature-flags.overriders.config.overrides.%s', $key->value)) !== null;
     }
 
     public function get(FeatureFlagEnum $key): bool
     {
-        return (bool) $this->config->get(sprintf('feature-flags.overrides.%s', $key->value));
+        return (bool) $this->config->get(sprintf('feature-flags.overriders.config.overrides.%s', $key->value));
     }
 
     /**
@@ -34,12 +34,26 @@ readonly class ConfigOverrider implements FeatureFlagOverrider
      */
     public function hasAll(): bool
     {
-        return $this->config->has('feature-flags.override-all')
-               && $this->config->get('feature-flags.override-all') !== null;
+        return $this->config->has('feature-flags.overriders.config.override_all')
+            && $this->config->get('feature-flags.overriders.config.override_all') !== null;
     }
 
     public function getAll(): bool
     {
-        return (bool) $this->config->get('feature-flags.override-all');
+        return (bool) $this->config->get('feature-flags.overriders.config.override_all');
+    }
+
+    public function set(FeatureFlagEnum $key, bool|null $value): static
+    {
+        $this->config->set(sprintf('feature-flags.overriders.config.overrides.%s', $key->value), $value);
+
+        return $this;
+    }
+
+    public function setAll(bool|null $value): static
+    {
+        $this->config->set('feature-flags.overriders.config.override_all', $value);
+
+        return $this;
     }
 }

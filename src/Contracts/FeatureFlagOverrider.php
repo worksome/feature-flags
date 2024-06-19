@@ -13,4 +13,8 @@ interface FeatureFlagOverrider
     public function hasAll(): bool;
 
     public function getAll(): bool;
+
+    public function set(FeatureFlagEnum $key, bool|null $value): static;
+
+    public function setAll(bool|null $value): static;
 }

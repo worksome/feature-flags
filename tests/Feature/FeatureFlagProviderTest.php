@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Config;
 use Worksome\FeatureFlags\FeatureFlagsOverrideProvider;
-use Worksome\FeatureFlags\Overriders\ConfigOverrider;
+use Worksome\FeatureFlags\Overriders\InMemoryOverrider;
 use Worksome\FeatureFlags\Providers\FakeProvider;
 use Worksome\FeatureFlags\Tests\Enums\TestFeatureFlag;
 
 beforeEach(function () {
     $this->fakeProvider = new FakeProvider();
+    $this->overrider = new InMemoryOverrider();
     $this->provider = new FeatureFlagsOverrideProvider(
         $this->fakeProvider,
-        new ConfigOverrider($this->app->get(Repository::class))
+        $this->overrider,
     );
 });
 
@@ -34,15 +33,16 @@ it('should validate the blade tags working correctly', function () {
     expect(Blade::compileString($bladeSnippet))->toBe($expectedCode);
 });
 
-it('should succesfully follow the override for a feature flag', function () {
-    expect(Config::get('feature-flags.overrides.amazing-feature'))
-        ->toBe(null)
+it('should successfully follow the override for a feature flag', function () {
+    expect($this->overrider->get(TestFeatureFlag::AmazingFeature))
+        ->toBeFalse()
         ->and($this->provider->flag(TestFeatureFlag::AmazingFeature))
         ->toBeFalse();
 
-    Config::set('feature-flags.overrides.amazing-feature', true);
 
-    expect(Config::get('feature-flags.overrides.amazing-feature'))
+    $this->overrider->set(TestFeatureFlag::AmazingFeature, true);
+
+    expect($this->overrider->get(TestFeatureFlag::AmazingFeature))
         ->toBeTrue()
         ->and($this->provider->flag(TestFeatureFlag::AmazingFeature))
         ->toBeTrue();
@@ -61,7 +61,7 @@ it('should correctly overide all feature flags if value is set', function () {
         ->and($this->provider->flag(TestFeatureFlag::FlagThree))
         ->toBeFalse();
 
-    Config::set('feature-flags.override-all', true);
+    $this->overrider->setAll(true);
 
     expect($this->provider->flag(TestFeatureFlag::FlagOne))
         ->toBeTrue()
