@@ -42,24 +42,48 @@ return [
                  * https://docs.launchdarkly.com/sdk/features/offline-mode
                  */
                 'offline' => env('LAUNCHDARKLY_OFFLINE', false)
-            ]
+            ],
+            /**
+             * @link https://docs.launchdarkly.com/home/account-security/api-access-tokens
+             */
+            'access-token' => env('FEATURE_FLAGS_API_ACCESS_TOKEN', null),
         ]
     ],
 
     /**
-     * Overrides all feature flags directly without hitting the provider.
-     * This is particularly useful for running things in the CI,
-     * e.g. Cypress tests.
+     * List of available overriders.
+     * Key is to be used to specify which overrider should be active.
      */
-    'override-all' => env('FEATURE_FLAGS_OVERRIDE_ALL'),
+    'overriders' => [
+        'config' => [
+            /**
+             * Overrides all feature flags directly without hitting the provider.
+             * This is particularly useful for running things in the CI,
+             * e.g. Cypress tests.
+             *
+             * Be careful in setting a default value as said value will be applied to all flags.
+             * Use `null` value if needing the key to be present but act as if it was not
+             */
+            'override-all' => null,
 
-    /**
-     * Override flags. If a feature flag is set inside an override,
-     * it will be used instead of the flag set in the provider.
-     *
-     * Usage: ['feature-flag-key' => true]
-     */
-    'overrides' => [],
+            /**
+             * Override flags. If a feature flag is set inside an override,
+             * it will be used instead of the flag set in the provider.
+             *
+             * Usage: ['feature-flag-key' => true]
+             *
+             * Be careful in setting a default value as it will be applied.
+             * Use `null` value if needing the key to be present but act as if it was not
+             *
+             */
+            'overrides' => [
+                // ...
+            ],
+        ],
+        'in-memory' => [
+            // ...
+        ]
+    ],
 ];
 ```
 

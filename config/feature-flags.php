@@ -36,8 +36,7 @@ return [
 
     /**
      * List of available overriders.
-     * Key is to be used to specify which overrider should be active
-     *
+     * Key is to be used to specify which overrider should be active.
      */
     'overriders' => [
         'config' => [
