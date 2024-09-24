@@ -111,10 +111,10 @@ it('sets override value for a single feature flag', function ($value) {
     null
 ]);
 
-it('sets overriderAll value', function ($value) {
+it('sets override-all value', function ($value) {
     $overrider = $this->app->make(ConfigOverrider::class);
     $overrider->setAll($value);
-    expect($this->configRepo->get('feature-flags.overriders.config.override_all'))->toBe($value);
+    expect($this->configRepo->get('feature-flags.overriders.config.override-all'))->toBe($value);
 })->with([
     true,
     false,
