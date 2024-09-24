@@ -34,13 +34,13 @@ readonly class ConfigOverrider implements FeatureFlagOverrider
      */
     public function hasAll(): bool
     {
-        return $this->config->has('feature-flags.overriders.config.override_all')
-            && $this->config->get('feature-flags.overriders.config.override_all') !== null;
+        return $this->config->has('feature-flags.overriders.config.override-all')
+            && $this->config->get('feature-flags.overriders.config.override-all') !== null;
     }
 
     public function getAll(): bool
     {
-        return (bool) $this->config->get('feature-flags.overriders.config.override_all');
+        return (bool) $this->config->get('feature-flags.overriders.config.override-all');
     }
 
     public function set(FeatureFlagEnum $key, bool|null $value): static
@@ -52,7 +52,7 @@ readonly class ConfigOverrider implements FeatureFlagOverrider
 
     public function setAll(bool|null $value): static
     {
-        $this->config->set('feature-flags.overriders.config.override_all', $value);
+        $this->config->set('feature-flags.overriders.config.override-all', $value);
 
         return $this;
     }
