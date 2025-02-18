@@ -18,8 +18,9 @@ use Worksome\FeatureFlags\Listeners\AuthListener;
 
 class FeatureFlagsServiceProvider extends EventServiceProvider
 {
+    /** @var list<class-string> */
     protected $subscribe = [
-        AuthListener::class
+        AuthListener::class,
     ];
 
     public function boot(): void
@@ -87,6 +88,7 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
             function (Container $app) {
                 /** @var FeatureFlagsApiManager $manager */
                 $manager = $app->get(FeatureFlagsApiManager::class);
+
                 return $manager->driver();
             }
         );
@@ -109,6 +111,7 @@ class FeatureFlagsServiceProvider extends EventServiceProvider
             $blade->if('feature', function (FeatureFlagEnum $flag) {
                 /** @var FeatureFlagsProviderContract $featureFlag */
                 $featureFlag = $this->app->get(FeatureFlagsProviderContract::class);
+
                 return $featureFlag->flag($flag);
             });
         });

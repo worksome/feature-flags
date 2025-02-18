@@ -11,6 +11,8 @@ use Worksome\FeatureFlags\Contracts\FeatureFlagOverrider;
  * This class is intended for usage mostly in testing context
  * It provides the necessary methods to interact with the current feature flag overrider.
  * Therefore, easily turning flag ON and OFF
+ *
+ * @phpstan-ignore trait.unused
  */
 trait InteractsWithFeatureFlags
 {

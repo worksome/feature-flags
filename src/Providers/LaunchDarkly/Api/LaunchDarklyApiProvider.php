@@ -33,7 +33,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
     {
         return [
             'Authorization' => $this->accessToken,
-            'Content-Type' => 'application/json; domain-model=launchdarkly.semanticpatch'
+            'Content-Type' => 'application/json; domain-model=launchdarkly.semanticpatch',
         ];
     }
 
@@ -61,7 +61,7 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
-                            "environmentKey" => $this->environmentKey,
+                            'environmentKey' => $this->environmentKey,
                     ],
                 ]
             );
@@ -70,16 +70,17 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
         }
     }
 
-    private function getVariationId(FeatureFlagEnum $featureFlagKey, bool $variationValue): ?string
+    private function getVariationId(FeatureFlagEnum $featureFlagKey, bool $variationValue): string|null
     {
         try {
-            $featureFlag = $this->get($featureFlagKey);
-            /** @var array */
-            $featureFlag = json_decode($featureFlag->getBody()->getcontents(), true);
+            $response = $this->get($featureFlagKey);
+            /** @var array{variations?: array} $featureFlag */
+            $featureFlag = json_decode($response->getBody()->getcontents(), true);
 
             if (isset($featureFlag['variations'])) {
-                /** @var array<string> */
+                /** @var array<array-key, string> $values */
                 $values = array_column($featureFlag['variations'], '_id', 'value');
+
                 return $values[$variationValue];
             }
 
@@ -100,13 +101,13 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
-                            "environmentKey" => $this->environmentKey,
-                            "comment" => $comment,
-                            "instructions" => [
+                            'environmentKey' => $this->environmentKey,
+                            'comment' => $comment,
+                            'instructions' => [
                                 [
-                                    "kind" => $instruction,
-                                ]
-                            ]
+                                    'kind' => $instruction,
+                                ],
+                            ],
                     ],
                 ]
             );
@@ -125,14 +126,14 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
-                            "environmentKey" => $this->environmentKey,
-                            "comment" => $comment,
-                            "instructions" => [
+                            'environmentKey' => $this->environmentKey,
+                            'comment' => $comment,
+                            'instructions' => [
                                 [
-                                    "kind" => 'replaceRules',
-                                    "rules" => [],
-                                ]
-                            ]
+                                    'kind' => 'replaceRules',
+                                    'rules' => [],
+                                ],
+                            ],
                     ],
                 ]
             );
@@ -163,21 +164,21 @@ class LaunchDarklyApiProvider implements FeatureFlagsApiProvider
                 [
                     RequestOptions::HEADERS => $this->headers(),
                     RequestOptions::JSON => [
-                        "environmentKey" => $this->environmentKey,
-                        "comment" => $comment,
-                        "instructions" => [
+                        'environmentKey' => $this->environmentKey,
+                        'comment' => $comment,
+                        'instructions' => [
                             [
-                                "kind" => "addRule",
-                                "clauses" => [
+                                'kind' => 'addRule',
+                                'clauses' => [
                                     [
-                                        "attribute" => "email",
-                                        "op" => "in",
-                                        "negate" => false,
-                                        "values" => $emailAddresses
-                                    ]
+                                        'attribute' => 'email',
+                                        'op' => 'in',
+                                        'negate' => false,
+                                        'values' => $emailAddresses,
+                                    ],
                                 ],
-                                "variationId" => $variationId,
-                            ]
+                                'variationId' => $variationId,
+                            ],
                         ],
                     ],
                 ]

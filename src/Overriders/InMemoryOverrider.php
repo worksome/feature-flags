@@ -50,21 +50,26 @@ class InMemoryOverrider implements FeatureFlagOverrider
     public function setAll(bool|null $value = null): static
     {
         $this->overrideAll = $value;
+
         return $this;
     }
 
     public function set(FeatureFlagEnum $key, mixed $value): static
     {
-        Arr::set($this->overrides, $key->value, $value);
+        Arr::set($this->overrides, $key->value, $value); // @phpstan-ignore assign.propertyType
+
         return $this;
     }
 
+    /** @param array<string, bool|null>|null $overriders */
     public function overrides(array|null $overriders): array|self
     {
         if ($overriders) {
             $this->overrides = $overriders;
+
             return $this;
         }
+
         return $this->overrides;
     }
 }

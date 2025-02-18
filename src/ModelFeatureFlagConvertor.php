@@ -9,6 +9,7 @@ use Worksome\FeatureFlags\Contracts\FeatureFlagUserConvertor;
 
 class ModelFeatureFlagConvertor implements FeatureFlagUserConvertor
 {
+    /** @param object{id?: int|string, email?: string} $user */
     public function convert(object $user): FeatureFlagUser
     {
         if (! property_exists($user, 'id')) {
