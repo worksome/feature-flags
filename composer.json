@@ -13,10 +13,12 @@
         "guzzlehttp/guzzle": "^7.8",
         "illuminate/contracts": "^11.0",
         "launchdarkly/server-sdk": "^6.0",
+        "open-feature/sdk": "^2.0",
         "spatie/laravel-package-tools": "^1.19"
     },
     "require-dev": {
         "nunomaduro/collision": "^8.1",
+        "open-feature/flagd-provider": "^1.0",
         "orchestra/testbench": "^9.0",
         "pestphp/pest": "^3.7",
         "pestphp/pest-plugin-laravel": "^3.1",

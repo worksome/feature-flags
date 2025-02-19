@@ -21,71 +21,7 @@ You can publish the config file with:
 php artisan vendor:publish --tag="feature-flags-config"
 ```
 
-This is the contents of the published config file:
-
-```php
-declare(strict_types=1);
-
-use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
-
-// config for Worksome/FeatureFlags
-return [
-    'default' => env('FEATURE_FLAGS_PROVIDER', 'launchdarkly'),
-
-    'convertor' => ModelFeatureFlagConvertor::class,
-
-    'providers' => [
-        'launchdarkly' => [
-            'key' => env('LAUNCHDARKLY_SDK_KEY'),
-            'options' => [
-                /**
-                 * https://docs.launchdarkly.com/sdk/features/offline-mode
-                 */
-                'offline' => env('LAUNCHDARKLY_OFFLINE', false)
-            ],
-            /**
-             * @link https://docs.launchdarkly.com/home/account-security/api-access-tokens
-             */
-            'access-token' => env('FEATURE_FLAGS_API_ACCESS_TOKEN', null),
-        ]
-    ],
-
-    /**
-     * List of available overriders.
-     * Key is to be used to specify which overrider should be active.
-     */
-    'overriders' => [
-        'config' => [
-            /**
-             * Overrides all feature flags directly without hitting the provider.
-             * This is particularly useful for running things in the CI,
-             * e.g. Cypress tests.
-             *
-             * Be careful in setting a default value as said value will be applied to all flags.
-             * Use `null` value if needing the key to be present but act as if it was not
-             */
-            'override-all' => null,
-
-            /**
-             * Override flags. If a feature flag is set inside an override,
-             * it will be used instead of the flag set in the provider.
-             *
-             * Usage: ['feature-flag-key' => true]
-             *
-             * Be careful in setting a default value as it will be applied.
-             * Use `null` value if needing the key to be present but act as if it was not
-             *
-             */
-            'overrides' => [
-                // ...
-            ],
-        ],
-        'in-memory' => [
-            // ...
-        ]
-    ],
-];
-```
+See the [config file](config/feature-flags.php) for more information.
 
 ### Creating Feature Flags
 
@@ -111,6 +47,30 @@ enum FeatureFlag: string implements \Worksome\FeatureFlags\Contracts\FeatureFlag
     This is content under a feature flag.
 @endfeature
 ```
+
+### OpenFeature
+
+The `open_feature` driver adds support for [OpenFeature](https://openfeature.dev), a vendor-agnostic ecosystem for feature flagging.
+
+To use this, follow the steps below:
+
+1. Install an [OpenFeature provider](https://openfeature.dev/ecosystem?instant_search%5BrefinementList%5D%5Btype%5D%5B0%5D=Provider&instant_search%5BrefinementList%5D%5BallTechnologies%5D%5B0%5D=PHP)
+    ```shell
+    composer require open-feature/flagd-provider
+    ```
+2. Create or use [an existing OpenFeature resolver](src/Providers/OpenFeature/Resolvers)
+3. Add the required configuration to the configuration file
+    ```php
+    'open_feature' => [
+        'resolver' => \Worksome\FeatureFlags\Providers\OpenFeature\Resolvers\FlagdOpenFeatureResolver::class,
+        'options' => [
+            'protocol' => env('FLAGD_PROTOCOL'),
+            'host' => env('FLAGD_HOST'),
+            'port' => env('FLAGD_PORT'),
+            'secure' => env('FLAGD_SECURE'),
+        ],
+    ],
+    ```
 
 ## Changelog
 
