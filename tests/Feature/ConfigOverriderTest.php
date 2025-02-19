@@ -29,7 +29,7 @@ test('has returns true if override key is present with truthy value', function (
     true,
     1,
     1.0,
-    "test",
+    'test',
     [1],
 ]);
 
@@ -40,8 +40,8 @@ test('has returns true if override key is present with falsy value', function ($
     false,
     0,
     0.0,
-    "",
-    "0",
+    '',
+    '0',
     [[]],
 ]);
 
@@ -108,7 +108,7 @@ it('sets override value for a single feature flag', function ($value) {
 })->with([
     true,
     false,
-    null
+    null,
 ]);
 
 it('sets override-all value', function ($value) {
@@ -118,5 +118,5 @@ it('sets override-all value', function ($value) {
 })->with([
     true,
     false,
-    null
+    null,
 ]);

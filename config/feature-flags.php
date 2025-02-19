@@ -25,13 +25,13 @@ return [
                 /**
                  * https://docs.launchdarkly.com/sdk/features/offline-mode
                  */
-                'offline' => env('LAUNCHDARKLY_OFFLINE', false)
+                'offline' => env('LAUNCHDARKLY_OFFLINE', false),
             ],
             /**
              * @link https://docs.launchdarkly.com/home/account-security/api-access-tokens
              */
             'access-token' => env('FEATURE_FLAGS_API_ACCESS_TOKEN', null),
-        ]
+        ],
     ],
 
     /**
@@ -58,7 +58,6 @@ return [
              *
              * Be careful in setting a default value as it will be applied.
              * Use `null` value if needing the key to be present but act as if it was not
-             *
              */
             'overrides' => [
                 // ...
@@ -66,7 +65,7 @@ return [
         ],
         'in-memory' => [
             // ...
-        ]
+        ],
     ],
 
 ];
