@@ -13,14 +13,19 @@
         "guzzlehttp/guzzle": "^7.8",
         "illuminate/contracts": "^11.0 || ^12.0",
         "launchdarkly/server-sdk": "^6.4",
+        "open-feature/sdk": "^2.0",
         "spatie/laravel-package-tools": "^1.19"
     },
     "require-dev": {
         "nunomaduro/collision": "^8.6",
+        "open-feature/flagd-provider": "^1.0",
         "orchestra/testbench": "^9.12 || ^10.1",
         "pestphp/pest": "^3.7",
         "pestphp/pest-plugin-laravel": "^3.1",
         "worksome/coding-style": "^3.2"
+    },
+    "suggest": {
+        "open-feature/flagd-provider": "Required to use the OpenFeature Flagd provider."
     },
     "autoload": {
         "psr-4": {

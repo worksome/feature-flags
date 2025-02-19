@@ -37,6 +37,12 @@ return [
              */
             'access-token' => env('FEATURE_FLAGS_API_ACCESS_TOKEN', null),
         ],
+        'open_feature' => [
+            'resolver' => env('OPEN_FEATURE_RESOLVER'),
+            'options' => [
+                // ...
+            ],
+        ],
     ],
 
     /**

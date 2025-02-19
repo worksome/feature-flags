@@ -48,6 +48,30 @@ enum FeatureFlag: string implements \Worksome\FeatureFlags\Contracts\FeatureFlag
 @endfeature
 ```
 
+### OpenFeature
+
+The `open_feature` driver adds support for [OpenFeature](https://openfeature.dev), a vendor-agnostic ecosystem for feature flagging.
+
+To use this, follow the steps below:
+
+1. Install an [OpenFeature provider](https://openfeature.dev/ecosystem?instant_search%5BrefinementList%5D%5Btype%5D%5B0%5D=Provider&instant_search%5BrefinementList%5D%5BallTechnologies%5D%5B0%5D=PHP)
+    ```shell
+    composer require open-feature/flagd-provider
+    ```
+2. Create or use [an existing OpenFeature resolver](src/Providers/OpenFeature/Resolvers)
+3. Add the required configuration to the configuration file
+    ```php
+    'open_feature' => [
+        'resolver' => \Worksome\FeatureFlags\Providers\OpenFeature\Resolvers\FlagdOpenFeatureResolver::class,
+        'options' => [
+            'protocol' => env('FLAGD_PROTOCOL'),
+            'host' => env('FLAGD_HOST'),
+            'port' => env('FLAGD_PORT'),
+            'secure' => env('FLAGD_SECURE'),
+        ],
+    ],
+    ```
+
 ## Changelog
 
 Please see the [Releases](https://github.com/worksome/feature-flags/releases) for more information on what has changed recently.
