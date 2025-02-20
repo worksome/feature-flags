@@ -19,6 +19,11 @@ return [
     'overrider' => 'config',
 
     'providers' => [
+        'bucket' => [
+            'key' => env('BUCKET_SECRET_KEY'),
+            'host' => env('BUCKET_HOST', 'https://front-eu.bucket.co'),
+            'options' => [],
+        ],
         'launchdarkly' => [
             'key' => env('LAUNCHDARKLY_SDK_KEY'),
             'options' => [
