@@ -7,8 +7,13 @@
     cacheDirectory=".phpunit.cache"
 >
     <testsuites>
-        <testsuite name="Worksome Test Suite">
+        <testsuite name="Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </source>
 </phpunit>
