@@ -9,10 +9,11 @@ parameters:
         - config
     tmpDir: build/phpstan
     checkModelProperties: true
-    treatPhpDocTypesAsCertain: false
     parallel:
             processTimeout: 300.0
+
     ignoreErrors:
-        -
-            identifier: larastan.noEnvCallsOutsideOfConfig
-            path: config
+      -
+        identifier: larastan.noEnvCallsOutsideOfConfig
+        path: config
+        reportUnmatched: false

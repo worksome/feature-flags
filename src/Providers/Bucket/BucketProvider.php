@@ -50,6 +50,7 @@ class BucketProvider implements FeatureFlagsProvider
 
     public function flag(FeatureFlagEnum $flag): bool
     {
+        // @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType
         assert(is_string($flag->value));
 
         $client = $this->client;
