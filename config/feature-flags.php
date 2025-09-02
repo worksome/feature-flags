@@ -19,9 +19,9 @@ return [
     'overrider' => 'config',
 
     'providers' => [
-        'bucket' => [
-            'key' => env('BUCKET_SECRET_KEY'),
-            'host' => env('BUCKET_HOST', 'https://front-eu.bucket.co'),
+        'reflag' => [
+            'key' => env('REFLAG_SECRET_KEY'),
+            'host' => env('REFLAG_HOST', 'https://front-eu.reflag.com'),
             'options' => [],
         ],
         'launchdarkly' => [

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Worksome\FeatureFlags\Providers\Bucket;
+namespace Worksome\FeatureFlags\Providers\Reflag;
 
 use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
@@ -10,11 +10,11 @@ use Worksome\FeatureFlags\Contracts\FeatureFlagEnum;
 use Worksome\FeatureFlags\Contracts\FeatureFlagsProvider;
 use Worksome\FeatureFlags\FeatureFlagUser;
 
-class BucketProvider implements FeatureFlagsProvider
+class ReflagProvider implements FeatureFlagsProvider
 {
-    private BucketContext|null $context = null;
+    private ReflagContext|null $context = null;
 
-    private BucketClient|null $client = null;
+    private ReflagClient|null $client = null;
 
     public function __construct(
         public readonly array $config,
@@ -23,12 +23,12 @@ class BucketProvider implements FeatureFlagsProvider
         /** @var string|null $key */
         $key = Arr::get($config, 'key');
         /** @var string $host */
-        $host = Arr::get($config, 'host', BucketClient::DEFAULT_BASE_URI);
+        $host = Arr::get($config, 'host', ReflagClient::DEFAULT_BASE_URI);
         /** @var array $options */
         $options = Arr::get($config, 'options');
 
         if ($key) {
-            $this->client = new BucketClient($host, $key, $options, $logger);
+            $this->client = new ReflagClient($host, $key, $options, $logger);
         }
     }
 
@@ -36,7 +36,7 @@ class BucketProvider implements FeatureFlagsProvider
     {
         $id = (string) $user->id;
 
-        $this->context = new BucketContext(
+        $this->context = new ReflagContext(
             id: $id,
             email: $user->email,
             context: $user->custom,
@@ -45,7 +45,7 @@ class BucketProvider implements FeatureFlagsProvider
 
     public function setAnonymousUser(): void
     {
-        $this->context = BucketContext::anonymous();
+        $this->context = ReflagContext::anonymous();
     }
 
     public function flag(FeatureFlagEnum $flag): bool

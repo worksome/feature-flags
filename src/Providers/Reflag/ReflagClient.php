@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Worksome\FeatureFlags\Providers\Bucket;
+namespace Worksome\FeatureFlags\Providers\Reflag;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
@@ -10,11 +10,11 @@ use GuzzleHttp\HandlerStack;
 use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
-use Worksome\FeatureFlags\Exceptions\Bucket\BucketInvalidResponseException;
+use Worksome\FeatureFlags\Exceptions\Reflag\ReflagInvalidResponseException;
 
-class BucketClient
+class ReflagClient
 {
-    public const string DEFAULT_BASE_URI = 'https://front-eu.bucket.co';
+    public const string DEFAULT_BASE_URI = 'https://front-eu.reflag.com';
 
     private Client $client;
 
@@ -39,12 +39,12 @@ class BucketClient
         $this->client = new Client($defaults);
     }
 
-    public function getFeature(string $value, bool $defaultValue, BucketContext|null $context = null): bool
+    public function getFeature(string $value, bool $defaultValue, ReflagContext|null $context = null): bool
     {
         $features = $this->getAllFeatures($context);
 
         if (! isset($features[$value])) {
-            $this->logger->warning("BucketClient::getFeature: Feature flag does not exist for key: {$value}");
+            $this->logger->warning("ReflagClient::getFeature: Feature flag does not exist for key: {$value}");
 
             return $defaultValue;
         }
@@ -53,7 +53,7 @@ class BucketClient
     }
 
     /** @return array<string, bool> */
-    public function getAllFeatures(BucketContext|null $context = null): array
+    public function getAllFeatures(ReflagContext|null $context = null): array
     {
         $transformedContext = $context?->transform() ?? [];
 
@@ -67,7 +67,7 @@ class BucketClient
             /** @var array{success?: bool, features?: array<string, array{isEnabled: bool}>} $response */
             $response = json_decode($body->getContents(), true);
 
-            throw_unless($response['success'] ?? false, BucketInvalidResponseException::class);
+            throw_unless($response['success'] ?? false, ReflagInvalidResponseException::class);
 
             /** @phpstan-ignore return.type */
             return Arr::mapWithKeys(
@@ -76,7 +76,7 @@ class BucketClient
             );
         } catch (BadResponseException $e) {
             $this->logger->warning(
-                "BucketClient::getAllFeatures: (code {$e->getResponse()->getStatusCode()}) {$e->getMessage()}"
+                "ReflagClient::getAllFeatures: (code {$e->getResponse()->getStatusCode()}) {$e->getMessage()}"
             );
 
             return [];
