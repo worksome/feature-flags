@@ -9,6 +9,8 @@ use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Providers\Bucket\BucketProvider;
 use Worksome\FeatureFlags\Providers\FakeProvider;
 use Worksome\FeatureFlags\Providers\LaunchDarkly\LaunchDarklyProvider;
+use Worksome\FeatureFlags\Providers\OpenFeature\Contracts\OpenFeatureResolver;
+use Worksome\FeatureFlags\Providers\OpenFeature\OpenFeatureProvider;
 
 class FeatureFlagsManager extends Manager
 {
@@ -33,6 +35,19 @@ class FeatureFlagsManager extends Manager
         $logger = $this->getContainer()->get(LoggerInterface::class);
 
         return new LaunchDarklyProvider(
+            $config,
+            $logger,
+        );
+    }
+
+    public function createOpenFeatureDriver(): OpenFeatureProvider
+    {
+        /** @var array{resolver: class-string<OpenFeatureResolver>|null, options: array<string, mixed>} $config */
+        $config = $this->config->get('feature-flags.providers.open_feature');
+        /** @var LoggerInterface $logger */
+        $logger = $this->getContainer()->get(LoggerInterface::class);
+
+        return new OpenFeatureProvider(
             $config,
             $logger,
         );
