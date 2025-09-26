@@ -5,7 +5,8 @@
 
 A package to manage feature flags in your application. Currently supporting these providers:
 
-- [LaunchDarkly](https://launchdarkly.com/)
+- [LaunchDarkly](https://launchdarkly.com)
+- [Reflag](https://reflag.com)
 
 ## Installation
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Worksome\FeatureFlags\Providers\Bucket;
+namespace Worksome\FeatureFlags\Providers\Reflag;
 
 use Illuminate\Support\Arr;
 
-readonly class BucketContext
+readonly class ReflagContext
 {
     /** @param array<string, mixed> $context */
     public function __construct(public string $id, public string|null $email = null, public array $context = [])

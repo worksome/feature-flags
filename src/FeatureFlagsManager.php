@@ -6,20 +6,20 @@ namespace Worksome\FeatureFlags;
 
 use Illuminate\Support\Manager;
 use Psr\Log\LoggerInterface;
-use Worksome\FeatureFlags\Providers\Bucket\BucketProvider;
 use Worksome\FeatureFlags\Providers\FakeProvider;
 use Worksome\FeatureFlags\Providers\LaunchDarkly\LaunchDarklyProvider;
+use Worksome\FeatureFlags\Providers\Reflag\ReflagProvider;
 
 class FeatureFlagsManager extends Manager
 {
-    public function createBucketDriver(): BucketProvider
+    public function createReflagDriver(): ReflagProvider
     {
         /** @var array $config */
-        $config = $this->config->get('feature-flags.providers.bucket');
+        $config = $this->config->get('feature-flags.providers.reflag');
         /** @var LoggerInterface $logger */
         $logger = $this->getContainer()->get(LoggerInterface::class);
 
-        return new BucketProvider(
+        return new ReflagProvider(
             $config,
             $logger,
         );
