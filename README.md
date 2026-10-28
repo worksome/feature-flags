@@ -1,7 +1,7 @@
 # Feature Flags
 
-[![PHPStan](https://github.com/worksome/feature-flags/actions/workflows/phpstan.yml/badge.svg)](https://github.com/worksome/feature-flags/actions/workflows/phpstan.yml)
-[![Run Tests](https://github.com/worksome/feature-flags/actions/workflows/run-tests.yml/badge.svg)](https://github.com/worksome/feature-flags/actions/workflows/run-tests.yml)
+[![PHPStan](https://img.shields.io/github/actions/workflow/status/worksome/feature-flags/static.yml?branch=main&style=flat-square&label=Static%20Analysis)](https://github.com/worksome/feature-flags/actions/workflows/static.yml)
+[![Run Tests](https://img.shields.io/github/actions/workflow/status/worksome/feature-flags/tests.yml?branch=main&style=flat-square&label=Tests)](https://github.com/worksome/feature-flags/actions/workflows/tests.yml)
 
 A package to manage feature flags in your application. Currently supporting these providers:
 
