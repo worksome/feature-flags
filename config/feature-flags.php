@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Worksome\FeatureFlags\ModelFeatureFlagConvertor;
+use Worksome\FeatureFlags\Providers\OpenFeature\Resolvers\FlagdOpenFeatureResolver;
 
 // config for Worksome/FeatureFlags
 return [
@@ -36,6 +37,36 @@ return [
              * @link https://docs.launchdarkly.com/home/account-security/api-access-tokens
              */
             'access-token' => env('FEATURE_FLAGS_API_ACCESS_TOKEN', null),
+        ],
+        'open_feature' => [
+            /**
+             * The resolver used to create the OpenFeature provider, from the `resolvers` below.
+             */
+            'default' => env('OPEN_FEATURE_RESOLVER', 'flagd'),
+
+            /**
+             * Resolvers implementing the OpenFeatureResolver contract.
+             * Any options other than `resolver` are passed to the resolver.
+             */
+            'resolvers' => [
+                'flagd' => [
+                    'resolver' => FlagdOpenFeatureResolver::class,
+                    'host' => env('FLAGD_HOST', 'localhost'),
+                    'port' => env('FLAGD_PORT', 8013),
+                    'secure' => env('FLAGD_SECURE', false),
+                    'timeout' => env('FLAGD_TIMEOUT', 1.0),
+                ],
+            ],
+
+            /**
+             * Number of seconds to cache evaluated flags for.
+             */
+            'cache_ttl' => 10,
+
+            /**
+             * Number of seconds to stop evaluating flags for after the provider becomes unavailable.
+             */
+            'retry_after' => 30,
         ],
     ],
 
