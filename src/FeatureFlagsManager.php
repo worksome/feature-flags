@@ -8,8 +8,10 @@ use Illuminate\Support\Manager;
 use Psr\Log\LoggerInterface;
 use Worksome\FeatureFlags\Providers\FakeProvider;
 use Worksome\FeatureFlags\Providers\LaunchDarkly\LaunchDarklyProvider;
+use Worksome\FeatureFlags\Providers\OpenFeature\OpenFeatureProvider;
 use Worksome\FeatureFlags\Providers\Reflag\ReflagProvider;
 
+/** @phpstan-import-type OpenFeatureConfig from OpenFeatureProvider */
 class FeatureFlagsManager extends Manager
 {
     public function createReflagDriver(): ReflagProvider
@@ -33,6 +35,19 @@ class FeatureFlagsManager extends Manager
         $logger = $this->getContainer()->get(LoggerInterface::class);
 
         return new LaunchDarklyProvider(
+            $config,
+            $logger,
+        );
+    }
+
+    public function createOpenFeatureDriver(): OpenFeatureProvider
+    {
+        /** @var OpenFeatureConfig $config */
+        $config = $this->config->get('feature-flags.providers.open_feature');
+        /** @var LoggerInterface $logger */
+        $logger = $this->getContainer()->get(LoggerInterface::class);
+
+        return new OpenFeatureProvider(
             $config,
             $logger,
         );
